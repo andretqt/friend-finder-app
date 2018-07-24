@@ -17,33 +17,33 @@
     <h1>This is the beginning of my survey page</h1>
     <form>
         <div class="form-group">
-            <label for="firstNameUser">First Name</label>
+            <label for="firstNameUser">Name</label>
             <input type="text" class="form-control" id="firstNameUser" placeholder="..your first name..">
         </div>
         <div class="form-group">
             <label for="question1">first survey question - pick an answer</label>
             <select class="form-control" id="question1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
             </select>
             <label for="question2">first survey question - pick an answer</label>
             <select class="form-control" id="question2">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
             </select>
             <label for="question3">first survey question - pick an answer</label>
             <select class="form-control" id="question3">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
             </select>
         </div>
         <button type='submit' class='submitButton'>Submit</button>
@@ -58,33 +58,36 @@
         event.preventDefault();
         console.log('just submitted form');
         var firstName = $('#firstNameUser').val().trim()
-        var answer1 = Number($('#question1').val().trim());
-        var answer2 = Number($('#question2').val().trim());
-        var answer3 = Number($('#question3').val().trim());
+        var answer1 = $('#question1').val().trim();
+        var answer2 = $('#question2').val().trim();
+        var answer3 = $('#question3').val().trim();
 
         //we gotta create an object for every submission
         var newFriend = {
             firstName: firstName,
-            score: [answer1, answer2, answer3]
+            score: [ answer1, answer2, answer3]
         };
-        var totalScore = newFriend.score.reduce((a, b) => a + b, 0);
+        var totalScore = newFriend.score.reduce((a, b) => Number(a) + Number(b), 0);
         var scoreDifferences = []
-        //gotta update our api with the new data --> post request
-        //then we gotta grab shit to make a match happen ---> get request
-        //or other way around
         $.post('/api/friends', newFriend, function (data) {
             alert('you submitted your form, check api page');
         }).done($.ajax({ url: '/api/friends', method: 'GET' }).then(function (friendData) {
             // //find the person with the closest total score
             //possibly gotta store the differences and go with the smallest one
-            friendData.forEach(friend => {
-                friendScore = friend.score.reduce((a, b) => a + b, 0);
-                scoreDifferences.push(totalScore - friendScore);                
-            });
+            for (var i = 0; i < friendData.length - 1; i++){
+                console.log( friendData[i].firstName + ' --------> ' +friendData[i].score.reduce((a, b) => Number(a) +Number(b), 0));
+                var differenceatI = totalScore - friendData[i].score.reduce((a, b) => Number(a) + Number(b), 0);
+                scoreDifferences.push(Math.abs(differenceatI));
+            };
             console.log(scoreDifferences);
-
-
+            //////
+            var smallestDifference = Math.min.apply(Math,scoreDifferences);
+            var indexLowest = scoreDifferences.findIndex((element) => element === smallestDifference);
+            console.log(indexLowest);
+            alert(friendData[indexLowest].firstName + ' would make a great friend');
+            
         }));
+       
 
     });
 
