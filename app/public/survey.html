@@ -19,6 +19,8 @@
         <div class="form-group">
             <label for="firstNameUser">Name</label>
             <input type="text" class="form-control" id="firstNameUser" placeholder="..your first name..">
+            <label for="linkToImage">Link to profile picture</label>
+            <input type="text" class="form-control" id="linkToImage" placeholder="..link to image..">
         </div>
         <div class="form-group">
             <label for="question1">first survey question - pick an answer</label>
@@ -68,7 +70,8 @@
     $('.submitButton').click(function () {
         event.preventDefault();
         console.log('just submitted form');
-        var firstName = $('#firstNameUser').val().trim()
+        var firstName = $('#firstNameUser').val().trim();
+        var link = $('#linkToImage').val().trim();
         var answer1 = $('#question1').val().trim();
         var answer2 = $('#question2').val().trim();
         var answer3 = $('#question3').val().trim();
@@ -76,12 +79,12 @@
         //we gotta create an object for every submission
         var newFriend = {
             firstName: firstName,
-            score: [answer1, answer2, answer3]
+            score: [answer1, answer2, answer3],
+            link: link,
         };
         var totalScore = newFriend.score.reduce((a, b) => Number(a) + Number(b), 0);
         var scoreDifferences = []
         $.post('/api/friends', newFriend, function (data) {
-            alert('you submitted your form, check api page');
         }).done($.ajax({ url: '/api/friends', method: 'GET' }).then(function (friendData) {
             // //find the person with the closest total score
             //possibly gotta store the differences and go with the smallest one
@@ -98,13 +101,18 @@
             // alert(friendData[indexLowest].firstName + ' would make a great friend');
             ////modal jquery stuff
             $('#modalText').html(`You should become friends with: ${friendData[indexLowest].firstName}`);
+            $('.modal-content').append(`<image src="${friendData[indexLowest].link}" id="image" alt="Smiley face" onerror="this.src='http://swaleswillis.co.uk/wp-content/uploads/2017/04/face-placeholder.gif'">`)//image user inputted (maybe valid or not) //insert variable
             modal.style.display = 'block';
             span.onclick = function() {
+                //delete the <object> here
+                $('#image').remove();
                 modal.style.display = 'none';
             };
             window.onclick = function(event) {
                 if (event.target == modal) {
+                    $('image').remove();
                     modal.style.display = "none";
+                    //delete the <object> here too
                 }
             };
             
@@ -114,6 +122,7 @@
 
 <style>
     body {font-family: Arial, Helvetica, sans-serif;}
+    form {width: 70%; margin: 0 auto;}
     
     /* The Modal (background) */
     .modal {
@@ -136,7 +145,7 @@
         margin: auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 80%;
+        width: 50%;
     }
     
     /* The Close Button */
@@ -152,5 +161,13 @@
         color: #000;
         text-decoration: none;
         cursor: pointer;
+    }
+    #modalText {
+        text-align: center;
+    }
+    img {
+        align-self: center;
+        height: 300px;
+        width: 300px;
     }
 </style>
