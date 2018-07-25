@@ -9,5 +9,6 @@ app.use(bodyParser.json());
 app.listen(PORT, function() {
     console.log('app listening on http://localhost:' +  PORT);
 });
-require('./routing/htmlRoutes.js')(app);
 require('./routing/apiRoutes.js')(app);
+require('./routing/htmlRoutes.js')(app);
+
