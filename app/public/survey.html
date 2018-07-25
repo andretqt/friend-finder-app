@@ -14,7 +14,8 @@
 </head>
 
 <body>
-    <h1>This is the beginning of my survey page</h1>
+    <h1>Fill in this survey and find your friend match</h1>
+    <h2>(1 - strongly disagree, 5 - strongly disagree)</h2>
     <form>
         <div class="form-group">
             <label for="firstNameUser">Name</label>
@@ -23,7 +24,7 @@
             <input type="text" class="form-control" id="linkToImage" placeholder="..link to image..">
         </div>
         <div class="form-group">
-            <label for="question1">first survey question - pick an answer</label>
+            <label for="question1">1. You prefer to tackle a problem at once instead of planning an apporach</label>
             <select class="form-control" id="question1">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -31,7 +32,7 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
             </select>
-            <label for="question2">first survey question - pick an answer</label>
+            <label for="question2">2. Sometimes pushing a task closest to the deadline helps you get started.</label>
             <select class="form-control" id="question2">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -39,8 +40,64 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
             </select>
-            <label for="question3">first survey question - pick an answer</label>
+            <label for="question3">3. The early bird catches the worm.</label>
             <select class="form-control" id="question3">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="question4">4. An extra hour of sleep is more beneficial than an hour long morning workout</label>
+            <select class="form-control" id="question4">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="question5">5. Weekends are best spent not sleeping in</label>
+            <select class="form-control" id="question5">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="question6">6. Driving with nowhere to go helps you relieve your mind</label>
+            <select class="form-control" id="question6">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="question7">7. One's freedom ends where the other one's starts</label>
+            <select class="form-control" id="question7">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="question8">8. You would rather live with someone than live alone</label>
+            <select class="form-control" id="question8">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="question9">9. The human being is good at heart, society corrupts its nature</label>
+            <select class="form-control" id="question9">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="question10">10. Music used to be better back then</label>
+            <select class="form-control" id="question10">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -50,6 +107,11 @@
         </div>
         <button type='submit' class='submitButton'>Submit</button>
     </form>
+    <footer>
+        <a href="api/friends">API friends list</a>
+         | 
+        <a href="https://github.com/andretqt/friend-finder-app">Github Repo</a>
+    </footer>
     <!-- The Modal -->
     <div id="myModal" class="modal">
         <!-- Modal content -->
@@ -62,10 +124,8 @@
 </html>
 
 <script>
-    //modal work stuff..
     var modal = document.getElementById('myModal');
-    var span = document.getElementsByClassName("close")[0];
-    
+    var span = document.getElementsByClassName("close")[0];    
     //i have to grab the user input ..so answers user selected. 
     $('.submitButton').click(function () {
         event.preventDefault();
@@ -75,38 +135,41 @@
         var answer1 = $('#question1').val().trim();
         var answer2 = $('#question2').val().trim();
         var answer3 = $('#question3').val().trim();
-
-        //we gotta create an object for every submission
+        var answer4 = $('#question4').val().trim();
+        var answer5 = $('#question5').val().trim();
+        var answer6 = $('#question6').val().trim();
+        var answer7 = $('#question7').val().trim();
+        var answer8 = $('#question8').val().trim();
+        var answer9 = $('#question9').val().trim();
+        var answer10 = $('#question10').val().trim();
         var newFriend = {
             firstName: firstName,
-            score: [answer1, answer2, answer3],
-            link: link,
+            score: [answer1, answer2, answer3, answer4, answer5, answer6, answer7, answer8, answer9, answer10],
+            link: link
         };
         var totalScore = newFriend.score.reduce((a, b) => Number(a) + Number(b), 0);
         var scoreDifferences = []
         $.post('/api/friends', newFriend, function (data) {
         }).done($.ajax({ url: '/api/friends', method: 'GET' }).then(function (friendData) {
             // //find the person with the closest total score
-            //possibly gotta store the differences and go with the smallest one
+            //store the differences and go with the smallest one
             for (var i = 0; i < friendData.length - 1; i++) {
-                console.log(friendData[i].firstName + ' --------> ' + friendData[i].score.reduce((a, b) => Number(a) + Number(b), 0));
                 var differenceatI = totalScore - friendData[i].score.reduce((a, b) => Number(a) + Number(b), 0);
                 scoreDifferences.push(Math.abs(differenceatI));
             };
-            console.log(scoreDifferences);
-            //////
             var smallestDifference = Math.min.apply(Math, scoreDifferences);
             var indexLowest = scoreDifferences.findIndex((element) => element === smallestDifference);
-            console.log(indexLowest);
-            // alert(friendData[indexLowest].firstName + ' would make a great friend');
-            ////modal jquery stuff
+
             $('#modalText').html(`You should become friends with: ${friendData[indexLowest].firstName}`);
-            $('.modal-content').append(`<image src="${friendData[indexLowest].link}" id="image" alt="Smiley face" onerror="this.src='http://swaleswillis.co.uk/wp-content/uploads/2017/04/face-placeholder.gif'">`)//image user inputted (maybe valid or not) //insert variable
+            $('.modal-content').append(`<image src="${friendData[indexLowest].link}" id="image" alt="Smiley face" onerror="this.src='http://swaleswillis.co.uk/wp-content/uploads/2017/04/face-placeholder.gif'">`);
             modal.style.display = 'block';
             span.onclick = function() {
                 //delete the <object> here
                 $('#image').remove();
                 modal.style.display = 'none';
+                $('#firstNameUser').val("");
+                $('#linkToImage').val("")
+
             };
             window.onclick = function(event) {
                 if (event.target == modal) {
@@ -115,15 +178,21 @@
                     //delete the <object> here too
                 }
             };
-            
         }));
     });
 </script>
 
 <style>
-    body {font-family: Arial, Helvetica, sans-serif;}
-    form {width: 70%; margin: 0 auto;}
-    
+    footer {
+        text-align: center;
+        margin-top: 40px;
+        margin-block-end: 20px;
+    }
+    body {font-family: Arial, Helvetica, sans-serif;background:white;}
+    form {width: 70%; margin: 0 auto; border:1px solid black; margin: auto; padding: 20px; border-color: transparent; background: whitesmoke; border-radius: 25px;}
+    h1 {text-align: center; margin-bottom: 30px; margin-top: 30px;}
+    h2 {text-align: center; margin-bottom: 30px; margin-top: 30px;}
+
     /* The Modal (background) */
     .modal {
         display: none; /* Hidden by default */

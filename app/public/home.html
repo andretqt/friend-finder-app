@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to our survey homepage</h1>
+        <p class="lead">We have come up with a survey that matches you with another person given on the answers you provide.</p>
+        <hr class="my-4">
+        <p class="lead" id='button-lead'>
+            <a class="btn btn-primary btn-lg" href="/survey" role="button">Take me to the survey</a>
+        </p>
+    </div>
+    <footer>
+        <a href="api/friends">API friends list</a>
+         | 
+        <a href="https://github.com/andretqt/friend-finder-app">Github Repo</a>
+    </footer>
+</body>
+
+</html>
+<style>
+    footer {
+        text-align: center;
+        margin-top: 40px;
+    }
+    .jumbotron {
+        width: 80%;
+        margin: auto;
+        margin-top: 30px;
+    }
+
+    .display-4 {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .lead {
+        text-align: justify
+    }
+
+    #button-lead {
+        text-align: center;
+        margin-top: 45px;
+        margin-bottom: -10px;
+    }
+</style>
